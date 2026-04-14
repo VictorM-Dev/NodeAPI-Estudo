@@ -1,6 +1,6 @@
 import type User from "../model/entities/user.js";
 import type UserUpdateDTO from "../model/DTO/userUpdateDTO.js";
-import UserRepository from "../userRepository.js";
+import UserRepository from "../repository/userRepository.js";
 import * as AppError from "../model/error/appError.js";
 import type { UUID } from "node:crypto";
 
