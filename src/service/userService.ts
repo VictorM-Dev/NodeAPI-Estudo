@@ -1,17 +1,54 @@
 import type User from "../model/entities/user.js";
-import type UserRepository from "../userRepository.js";
+import type UserUpdateDTO from "../model/DTO/userUpdateDTO.js";
+import UserRepository from "../userRepository.js";
+import * as AppError from "../model/error/appError.js";
+import type { UUID } from "node:crypto";
 
-export default class UserService{
-  constructor(private userRepository: UserRepository){}
-  public CreateUser(user: User) {
-    if(!user.getEmail()){
-      throw new Error("Email is required");
+export default class UserService {
+  constructor(private userRepository: UserRepository) {}
+  public createUser(user: User) {
+    if (!user.getEmail()) {
+      throw new AppError.ArgumentRequired("Email is required");
     }
-    if(!user.getPassword()){
-      throw new Error("Password is required");
+    if (!user.getPassword()) {
+      throw new AppError.ArgumentRequired("Password is required");
     }
-    if(!user.getName()){
-      throw new Error("Name is required");
+    if (!user.getName()) {
+      throw new AppError.ArgumentRequired("Name is required");
     }
+
+    return this.userRepository.saveUser(user);
+  }
+  public getUserById(id: UUID) {
+    const dataUser = this.userRepository.findUserById(id);
+    if (!dataUser) {
+      throw new AppError.UserNotFound("User not found");
+    }
+    return dataUser;
+  }
+  public getAllUsers() {
+    return this.userRepository.findAll();
+  }
+  public removeUser(id: UUID) {
+    if (this.userRepository.delete(id) === null) {
+      throw new AppError.UserNotFound("User not found");
+    }
+  }
+  public updateUser(id: UUID, userData: UserUpdateDTO) {
+    const user = this.userRepository.findUserById(id);
+    if (!user) {
+      throw new AppError.UserNotFound("User not found");
+    }
+    if(!userData.email){
+      throw new AppError.ArgumentRequired("Email is required");
+    } else if (userData.email !== user.getEmail()){
+      user.setEmail(userData.email);
+    }
+    if(!userData.name){
+      throw new AppError.ArgumentRequired("Name is required");
+    } else if (userData.name !== user.getName()){
+      user.setName(userData.name);
+    }
+    return user;
   }
 }
