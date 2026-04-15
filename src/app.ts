@@ -13,7 +13,8 @@ const userService = new UserService(userRepository);
 const userController = new UserController(userService);
 
 app.use(express.json());
-app.use("/user/create", router.userRouter(userController));
+app.use("/user/create", router.create(userController));
+app.use("/user/search", router.find(userController));
 app.use(erroMiddleware);
 
 app.listen(3000, () => {
