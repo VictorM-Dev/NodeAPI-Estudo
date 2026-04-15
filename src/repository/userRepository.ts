@@ -1,4 +1,4 @@
-import User from "./model/entities/user.js";
+import User from "../model/entities/user.js";
 import type { UUID } from "node:crypto";
 
 export default class UserRepository{
@@ -6,6 +6,7 @@ export default class UserRepository{
 
   public saveUser(userData: User){
     this.repository.push(userData);
+    return userData;
   }
 
   public findUserById(id: UUID){
