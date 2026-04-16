@@ -34,21 +34,4 @@ export default class UserService {
       throw new AppError.UserNotFound("User not found");
     }
   }
-  public updateUser(id: UUID, userData: UserUpdateDTO) {
-    const user = this.userRepository.findUserById(id);
-    if (!user) {
-      throw new AppError.UserNotFound("User not found");
-    }
-    if(!userData.email){
-      throw new AppError.ArgumentRequired("Email is required");
-    } else if (userData.email !== user.getEmail()){
-      user.setEmail(userData.email);
-    }
-    if(!userData.name){
-      throw new AppError.ArgumentRequired("Name is required");
-    } else if (userData.name !== user.getName()){
-      user.setName(userData.name);
-    }
-    return user;
-  }
 }
