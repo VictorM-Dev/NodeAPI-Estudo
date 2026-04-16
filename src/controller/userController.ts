@@ -35,4 +35,11 @@ export default class UserController {
     );
     res.status(200).json(dataUserDTO);
   }
+  findAll(req: Request, res: Response){
+    res.status(200).json(this.userService.getAllUsers());
+  }
+  deleteByID(req: Request, res: Response){
+    this.userService.removeUser(req.params.id as UUID);
+    res.status(200);
+  }
 }
